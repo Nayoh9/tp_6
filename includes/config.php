@@ -10,4 +10,7 @@ try {
     // e->getmessage()
 }
 
-$error_db = "Error, no results found";
+$error_db = "error_no_results_found";
+
+$ok_redirect = "accueil";
+$not_ok_redirect = "login";

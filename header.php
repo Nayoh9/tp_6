@@ -20,17 +20,7 @@
 
             <?php
             if (!empty($_GET["error"])) {
-                $error = $_GET["error"];
-
-                switch ($error) {
-                    case 'invalid_password_or_identifier':
-                        $error;
-                        break;
-
-                    default:
-                        "unknow_error";
-                        break;
-                }
+                $error = htmlspecialchars(parse_error($_GET["error"]));
             ?>
                 <div class="col-md-12 text-center d-flex justify-content-center mt-2">
                     <div class="col-md-4 alert alert-danger">

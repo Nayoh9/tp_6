@@ -1,7 +1,12 @@
     <?php
     include "includes/functions.php";
 
-    empty($_POST) && header("location: login.php");
+    $error = false;
+
+    if (empty($_POST["identifier"]) || empty($_POST["password"])) {
+        $error = "invalid_password_or_identifier";
+        header("location:$not_ok_redirect?error=$error");
+    }
 
     $identifier = htmlentities($_POST["identifier"]);
     $password = $_POST["password"];
@@ -15,15 +20,17 @@
         $user_already_in_db_result = $user_already_in_db->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         // var_dump("erreur :" . $e->getMessage() . "<br />");
-        echo $error_db;
+        header("location: $not_ok_redirect?error=$error_db");
     }
 
-    $passwords_match = password_verify($password, $user_already_in_db_result["password"]);
+    if ($user_already_in_db_result) {
+        $passwords_match = password_verify($password, $user_already_in_db_result["password"]);
+    }
 
     if (!$passwords_match) {
         $error = "invalid_password_or_identifier";
-        header("location: login.php?error=$error");
+        header("location: $not_ok_redirect?error=$error");
     } else {
         setcookie("user", $user_already_in_db_result["uid"], time() + 180);
-        header("location: index.php");
+        header("location: $ok_redirect");
     }
